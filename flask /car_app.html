@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+
+<head>
+
+  <meta charset="utf-8">
+
+  <script 
+    src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js">
+  </script>
+  
+  <link href='//fonts.googleapis.com/css?family=League Script' rel='stylesheet'>
+  <link href='//fonts.googleapis.com/css?family=Bubbler One' rel='stylesheet'>
+  <link href='//fonts.googleapis.com/css?family=Permanent Marker' rel='stylesheet'>
+  <link href='//fonts.googleapis.com/css?family=Basic' rel='stylesheet'>
+  <link href='//fonts.googleapis.com/css?family=Permanent Marker' rel='stylesheet'>
+  <link href="//fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+  <link href="//fonts.googleapis.com/css?family=Merriweather" rel="stylesheet">
+ 
+
+
+</head>
+
+<style type = "text/css">
+  
+  body {
+    background-color: #6ed3cf ;
+    width: 700px; margin: auto;
+  }
+
+  .welcome-message {
+    text-align: center;
+    font-family: 'Merriweather';font-size: 22px;
+  
+  }
+
+  .body-text {
+    text-align: center;
+    font-family: 'Merriweather';font-size: 22px;
+    font-weight: bold;
+  }
+  
+  
+  .page-header {
+    font-size: 40px;
+    font-family: 'Merriweather';
+    font-weight: bold;
+    text-align: center;
+    
+  }
+  .input-group-label {
+    font-size: 16px;
+    font-family: 'Merriweather';
+    font-size: 20px;
+  }
+  .input-group-field {
+    width: 600px;
+    height: 100px;
+    font-family: 'Merriweather';
+    border-style: dashed;
+    border-width: 1px;
+    border-color: gray;
+    font-size: 14px;
+  }
+  .send-button {
+    height: 28px;
+    background-color: #c1d9ff;
+    font-size: 16px;
+    font-family: 'Merriweather';
+    color: black;
+    font-weight: bold;
+    border: 2px solid #c1d9ff; /* Green */
+  }
+  .send-button:hover {
+    background-color: #3769ba; /* Green */
+    color: white;
+}
+  .user-answer-label {
+    font-family: 'Merriweather';font-size: 20px;
+  }
+  .answer-for-user {
+    width: 600px;
+    height: 200px;
+    border-style: dashed;
+    border-width: 1px;
+    border-color: gray;
+    font-size: 14px;
+  }
+  ::-webkit-input-placeholder { 
+    color: gray;
+  }
+</style>
+
+<body>
+  <label class="page-header">CARS4YOU  </label><br>
+  <br>
+<form>
+  
+  <label class="welcome-message"
+  <p>Welcome!  <br> <br>
+   Used car shopping can be overwhelming considering all the options you have when making the right car purchase.
+    Tell us a few things about your car preferences and we'll provide some recommendations. Please be descriptive as possible! </p>
+  </label>
+      <label class="input-group-label">Description:</label>
+    <br>
+      <textarea class="input-group-field" id="user-question" style="width: 700px;"></textarea>
+      <br>
+      <input 
+        class="send-button" 
+        type="button" 
+        value="SUBMIT"
+        onClick="collectQuestion()"
+        />
+      <p class=""></p>
+  <br>
+
+
+  
+<label class="user-answer-label">Top 10 Recommendations: </label>
+<br>
+<textarea 
+  class="answer-for-user" 
+  name="area" 
+  id="user-answer"
+  style="width: 700px;"
+  style="maxlength: 300px;"
+  
+  readonly></textarea>
+
+</form>
+
+
+<script>
+var answer = ""
+
+
+// Gets the question that the user typed in
+
+
+
+function collectQuestion() {
+  var userQuestion = document.getElementById("user-question").value;
+  // Remove newline characters
+  var userQuestion = userQuestion.replace(/\r?\n|\r/g, " ");
+  // Remove quotation marks 
+  var userQuestion = userQuestion.replace(/['"]+/g, '')
+  //console.log(typeof userQuestion);
+  //console.log(userQuestion);
+  $.ajax({
+    type: "POST",
+    contentType: "application/json; charset=utf-8",
+    url: "/cars",
+    dataType: "json",
+    async: true,
+    // data: JSON.stringify({"question" : ["+userQuestion+"]}),
+    data: "{\"question\": [\""+userQuestion+"\"]}",
+    success: function(d) {
+      answer = d.answer.toString().replace(/,/g, "\n");
+
+    
+
+      document.getElementById("user-answer").value = answer
+      
+      // console.log(userQuestion)
+    }
+  })
+}
+        
+</script>
+
+
+</body>
